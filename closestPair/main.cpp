@@ -51,9 +51,6 @@ int main(int argc, const char * argv[]) {
     
     myGrid.removeDups();
     
-    if(argc!=1 && !testing)
-        return 1;
-    
     if(argv[1]=="brute" || testing){
         pairOfCoors q = myGrid.brute();
         cout << "closest pair distance: "<< myGrid.distanceBetween(q)<<endl;
