@@ -49,26 +49,33 @@ int main(int argc, const char * argv[]) {
         myGrid.randGrid(10000, -10000, 10000);
     }
     
+    if(myGrid.n()<2){
+        cout <<"too few points provided"<<endl;
+        return 1;
+    }
+    
     myGrid.removeDups();
     
-    if(argv[1]=="brute" || testing){
+    if(string(argv[1])=="brute" || testing){
         pairOfCoors q = myGrid.brute();
         cout << "closest pair distance: "<< myGrid.distanceBetween(q)<<endl;
         cout << "closest pair:\n"<< q <<endl;
-    }
+    }else
     
     
-    if(argv[1]=="basic" || testing){
+    if(string(argv[1])=="basic" || testing){
         pairOfCoors q = myGrid.basic(true, 0, myGrid.n());
         cout << "closest pair distance: "<< myGrid.distanceBetween(q) <<endl;
         cout << "closest pair:\n"<< q <<endl;
-    }
+    }else
     
     
-    if(argv[1]=="optimal" || testing){
+    if(string(argv[1])=="optimal" || testing){
         pairOfCoors q = myGrid.optimal();
         cout << "closest pair distance: "<< myGrid.distanceBetween(q) <<endl;
         cout << "closest pair:\n"<< q <<endl;
+    }else{
+        cout <<"no option specified";
     }
     
     return 0;
