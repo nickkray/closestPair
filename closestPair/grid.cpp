@@ -73,20 +73,12 @@ void grid::sortByX(){
 void grid::sortByY(){
     sort(allPairs.begin(), allPairs.end(), coor::byY);
 }
-pair<coor, coor> grid::findClosestInRange(double highX, double lowX, double highY, double lowY, bool splitByMidpoint, size_t midpointValue){
+pair<coor, coor> grid::findClosestInIndexRange(int min, int max){
     double minDistance = INFINITY;
     pair<coor, coor> closest = pair<coor, coor>(coor(INFINITY, INFINITY), coor(-INFINITY, -INFINITY));
     
-    for (int i = 0; i<allPairs.size(); i++){
-        for(int j = i+1 ;j<allPairs.size(); j++){
-            if(splitByMidpoint){
-                if( !(((allPairs[i].getX()<midpointValue)&&(allPairs[j].getX()>midpointValue)) || ((allPairs[i].getX()>midpointValue)&&(allPairs[j].getX()<midpointValue))))
-                    continue;
-            }
-            if(!allPairs[i].withinRange(highX, lowX, highY, lowY))
-                continue;
-            if(!allPairs[j].withinRange(highX, lowX, highY, lowY))
-                continue;
+    for (int i = min; i<max; i++){
+        for(int j = i+1 ;j<max; j++){
             double d = distanceBetween(allPairs[i], allPairs[j]);
             if(d<minDistance){
                 minDistance = d;
@@ -96,13 +88,17 @@ pair<coor, coor> grid::findClosestInRange(double highX, double lowX, double high
     }
     return closest;
 }
+
+
+
 coor grid::at(size_t i){
     return allPairs[i];
 }
-grid grid::rangedSubset(double highX, double lowX, double highY, double lowY){
+
+grid grid::rangedSubset(double highX, double lowX, int min, int max){
     grid subset;
-    for (int i = 0; i<allPairs.size(); i++){
-        if(allPairs[i].withinRange(highX, lowX, highY, lowY))
+    for (int i = min; i<max; i++){
+        if(allPairs[i].withinRange(highX, lowX))
             subset.add(allPairs[i]);
     }
     return subset;
@@ -114,6 +110,7 @@ grid grid::indexRangedSubset(int low, size_t high){
     }
     return subset;
 }
+
 void grid::printGrid(){
     cout <<"Pairs: "<<endl;
     for(int i=0;i<allPairs.size();i++){

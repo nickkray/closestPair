@@ -34,7 +34,7 @@ class coor{
     bool static byY(coor a, coor b){
         return (a.getY()<b.getY());
     }
-    bool withinRange(double highX = 0, double lowX = 0, double highY = 0, double lowY = 0);
+    bool withinRange(double highX = 0, double lowX = 0);
     bool operator==(const coor &rhs) const;
 };
 

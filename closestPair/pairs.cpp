@@ -34,10 +34,10 @@ double coor::getY() const{
     return r;
 }
 
-bool coor::withinRange(double highX, double lowX, double highY, double lowY){
-    if (highX==0 && highY == 0 && lowX == 0 && lowY==0)
+bool coor::withinRange(double highX, double lowX){
+    if (highX==0 && lowX == 0)
         return true;
-    if(l>highX || l<lowX || r>highY || r<lowY)
+    if(l>highX || l<lowX)
         return false;
     return true;
 }

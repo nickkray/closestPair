@@ -16,6 +16,8 @@
 
 using namespace std;
 
+typedef pair<coor, coor> pairOfCoors;
+
 class grid{
     private:
         vector<coor> allPairs;
@@ -35,12 +37,56 @@ class grid{
         double distanceBetween(pair<coor, coor> a);
         void sortByX();
         void sortByY();
-        pair<coor, coor> findClosestInRange(double highX = 0, double lowX = 0, double highY = 0, double lowY = 0, bool splitByMidpoint = false, size_t midpointValue = INFINITY);
+        pair<coor, coor> findClosestInIndexRange(int min, int max);
         coor at(size_t i);
-        grid rangedSubset(double highX = 0, double lowX = 0, double highY = 0, double lowY = 0);
+        grid rangedSubset(double highX = 0, double lowX = 0, int min = 0, int max = 0);
         grid indexRangedSubset(int low, size_t high);
         void printGrid();
         void randGrid(int n, int max, int min);
+        pairOfCoors brute(){
+            return findClosestInIndexRange(0, n());
+        }
+        pairOfCoors optimal(){
+            sortByX();
+            sortByY();
+            return basic(false, 0, n());
+            
+        }
+        pairOfCoors basic(bool sort, int min, int max){
+            if(max-min<=3)
+                return findClosestInIndexRange(min, max);
+            if(sort)
+                std::sort(allPairs.begin()+min, allPairs.begin()+max, coor::byX);
+            int mid = round(max/2);
+            double midpoint = allPairs[mid].getX();
+            
+            pairOfCoors left, right;
+            left = basic(sort, min, mid);
+            right = basic(sort, min+mid, max-mid);
+            
+            double leftD = distanceBetween(left);
+            double rightD = distanceBetween(right);
+            double bestD;
+            if(leftD<rightD)
+                bestD = leftD;
+            else
+                bestD = rightD;
+            grid centerGrid = rangedSubset(midpoint + bestD, midpoint - bestD, min, max);
+            if(sort)
+                centerGrid.sortByY();
+            pairOfCoors center = centerGrid.findClosestInIndexRange(0, centerGrid.n()); //midpoint?
+            
+            double centerD = distanceBetween(center);
+            
+            if(centerD<bestD)
+                bestD = centerD;
+            if(bestD==centerD)
+                return center;
+            if(bestD==leftD)
+                return left;
+            return right;
+            
+        }
 };
 
 #endif /* defined(__closestPair__grid__) */
